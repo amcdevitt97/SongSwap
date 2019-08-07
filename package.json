@@ -1,0 +1,17 @@
+{
+  "name": "songswap",
+  "version": "1.0.0",
+  "description": "A bot for swapping songs on telegram",
+  "main": "bot.js",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.30.0",
+    "spotify-web-api-node": "^4.0.0",
+    "url-metadata": "^2.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "/test"
+  },
+  "author": "",
+  "license": "ISC"
+}
