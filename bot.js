@@ -1,6 +1,5 @@
 var TelegramBot = require('node-telegram-bot-api'); 
 var token = require('./config/config.js').authToken;
-
 const bot = new TelegramBot(token, {polling: true});
 
 //---------------   SPOTIFY API - With Wrapper     ------------------
@@ -27,10 +26,28 @@ spotifyApi.clientCredentialsGrant().then(
     console.log('Something went wrong!', err);
   }
 );
+// ----------------- END SPOTIFY API-----------------------
+// --------------------------------------------------------
+// ----------------- START APPLE MUSIC VIA SEARCH----------
 
-// ----------------- END SPOTIFY API
+const {google} = require('googleapis');
+const customsearch = google.customsearch('v1');
+var customSearchKey = require('./config/config.js').customSearchKey; 
+var customSearchID = require('./config/config.js').customSearchID; 
+
+async function runSearch(query) {
+  const res = await customsearch.cse.list({
+    cx: customSearchID ,
+    q: query,
+    auth: customSearchKey,
+  });
+  return res.data.items[0].link;
+}
+
+// ----------------- END APPLE MUSIC SEARCH
 
 
+// Explaination of the bot
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(msg.chat.id, "Welcome to songswap. I'll send the Apple music link for "+
   "any Spotify song sent, and the Spotify link for any Apple music song sent. "+
@@ -38,33 +55,44 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
+// The real magic
 bot.on('text', function (msg){
   var chatId = msg.chat.id;
   if(msg.text.toString().includes("https://open.spotify.com/")){
     
     var spotifyRegex = /(https:\/\/open\.spotify\.com\/track\/)([a-zA-Z0-9]+)(.*)$/g;
-    
-    
     var foundURL = msg.text.toString().match(spotifyRegex);
-
+    
+    // Get spotify song ID
     var spotifyID = foundURL.toString().match(/\/\w{22}/g).toString().substring(1, 23);
-    // TODO: use spotify web API to get the artist and track title 
-    bot.sendMessage(msg.chat.id, "Spotify ID is: " + spotifyID, {});
 
     // Lookup title and artist
     spotifyApi.getTrack(spotifyID)
     .then(function (data) {
-        console.log('TITLE: ', data.body.name);
-        console.log('ARTISTS: ', data.body.artists[0].name);
-        bot.sendMessage(msg.chat.id, "TITLE: "+ data.body.name, {});
-        data.body.artists.forEach(artist => { bot.sendMessage(msg.chat.id, "ARTIST: "+ artist.name, {}); });
+        var query = data.body.name + ' ';
+        
+        data.body.artists.forEach(artist => { query+= artist.name; });
+
+        runSearch(query).then(function(link){
+
+          // TODO: based on whether this link has /album/ or /artist/ in the url,
+          // either scrape it for links that have our title in it, or store all 
+          // list items (li) with ' "targetId": ' in their properties list, and 
+          // put all the ones with numbers following it into an array. Pull the 
+          // spotify track number and get the song id from the given array based
+          // on that track number. 
+          
+          // This is excessive scraping but this is what Apple gets
+          // when they make their Music API 99 dollars to use...
+          
+          // for now, this will at least link to the artist/album for a given song. 
+          bot.sendMessage(msg.chat.id, "LINK: "+ link, {});
+        });
+
     }, function (err) {
         console.log('Something went wrong!', err);
     });
 
-    // TODO: 
-    // Use apple music API to search the song
-    // get first results' URL and send it
   }
 
   if(msg.text.toString().includes("https://music.apple.com")){

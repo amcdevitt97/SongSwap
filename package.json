@@ -6,7 +6,8 @@
   "dependencies": {
     "node-telegram-bot-api": "^0.30.0",
     "spotify-web-api-node": "^4.0.0",
-    "url-metadata": "^2.4.0"
+    "url-metadata": "^2.4.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {},
   "scripts": {
