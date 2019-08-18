@@ -1,3 +1,4 @@
+const axios = require('axios');
 var TelegramBot = require('node-telegram-bot-api'); 
 var token = require('./config/config.js').authToken;
 const bot = new TelegramBot(token, {polling: true});
@@ -74,19 +75,37 @@ bot.on('text', function (msg){
         data.body.artists.forEach(artist => { query+= artist.name; });
 
         runSearch(query).then(function(link){
-
-          // TODO: based on whether this link has /album/ or /artist/ in the url,
-          // either scrape it for links that have our title in it, or store all 
-          // list items (li) with ' "targetId": ' in their properties list, and 
-          // put all the ones with numbers following it into an array. Pull the 
-          // spotify track number and get the song id from the given array based
-          // on that track number. 
+          var artistRegex = /https?:\/\/(music\.)?apple\.com\/([-a-zA-Z]{2})\/artist\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+          var albumRegex = /https?:\/\/(music\.)?apple\.com\/([-a-zA-Z]{2})\/album\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+          if(link.match(artistRegex)){
+            axios({
+              method: 'get',
+              url: 'https://api.hackertarget.com/pagelinks/?q='+link,
+              responseType: 'JSON'
+            })
+              .then(function (response) {
+                console.log(response.data);
+                let results = response.data.match(albumRegex);
+                // TODO: go through the links in results and look for one that has a title that matches our song
+                for(var i = 0; i<results.length; i++){
+                  bot.sendMessage(msg.chat.id, results[i], {});
+                }
+              })
+              .catch(function (error) {
+                bot.sendMessage(msg.chat.id, "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ error, {});
+              });;
+            
+          }
+          else if(link.match(albumRegex)){
+            // TODO : store all list items (li) with ' "targetId": ' in their 
+            // properties list, and put all the ones with numbers following 
+            // it into an array. Pull the spotify track number and get the
+            // song id from the given array based on that track number. 
+            bot.sendMessage(msg.chat.id, "ALBUM LINK: "+ link, {});
+          }
           
           // This is excessive scraping but this is what Apple gets
-          // when they make their Music API 99 dollars to use...
-          
-          // for now, this will at least link to the artist/album for a given song. 
-          bot.sendMessage(msg.chat.id, "LINK: "+ link, {});
+          // when they make their Music API 99 dollars to use... 
         });
 
     }, function (err) {
