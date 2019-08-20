@@ -1,21 +1,20 @@
 const axios = require('axios');
+// TODO: generate new bot token
 var TelegramBot = require('node-telegram-bot-api'); 
 var token = require('./config/config.js').authToken;
 const bot = new TelegramBot(token, {polling: true});
 var found = false;
 //---------------   SPOTIFY API - With Wrapper     ------------------
 
-//  https://github.com/thelinmichael/spotify-web-api-node#installation
 var client_id = require('./config/config.js').spotifyClientID; // Your client id
 var client_secret = require('./config/config.js').spotifyClientSecret; // Your secret
 var redirect_uri = require('./config/config.js').spotifyRedirectURI;
 
 var SpotifyWebApi = require('spotify-web-api-node');
-// credentials are optional
+
 var spotifyApi = new SpotifyWebApi({
     clientId: client_id,
     clientSecret: client_secret,
-  //  redirectUri: redirect_uri,
 });
 
 // Get an access token and 'save' it using a setter
@@ -55,15 +54,8 @@ function searchAppleMusicLink(query, msg, title){
       fromAppleArtistLink(link, msg, title);
     }
     else if(link.match(albumRegex)){
-      // TODO : store all list items (li) with ' "targetId": ' in their 
-      // properties list, and put all the ones with numbers following 
-      // it into an array. Pull the spotify track number and get the
-      // song id from the given array based on that track number. 
-      bot.sendMessage(msg.chat.id, "ALBUM LINK: "+ link, {});
+      getHTMLforAlbum(link, msg, title);
     }
-    
-    // This is excessive scraping but this is what Apple gets
-    // when they make their Music API 99 dollars to use... 
   });
 }
 
@@ -99,7 +91,6 @@ function fromAppleArtistLink(link, msg, title){
 // look for the link that has a title that matches our song
 function getHTMLfor(link, msg, title){
   axios.get(link).then(response => {
-    console.log(title);
     // Site has a title tag with our song title in it
     if(response.data.toString().toLowerCase().includes('<title>‎'+title.toLowerCase())){
       found = true;
@@ -108,6 +99,31 @@ function getHTMLfor(link, msg, title){
     }
     else{
       console.log('NOT THIS');
+    }
+  })
+  .catch(error => {
+    console.log(error);
+  })
+}
+
+function getHTMLforAlbum(link, msg, title){
+  // Look for this in the link's HTML
+  var propertyRegex = /\{\"\@type\"\:\"MusicRecording"\,\"url\"\:\"https?:\/\/(music\.)?apple\.com\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\"\,\"name\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
+  // Look for the link in the array of properties
+  var songRegex = /https?:\/\/(music\.)?apple\.com\b([-a-zA-Z0-9?//=]*)/g;
+  axios.get(link).then(response => {
+    // Get all the songs listed in the HTML doc
+    let songs = response.data.toString().match(propertyRegex);
+    var i;
+    for(i = 0; i<songs.length; i++){
+      // For each song, look for the one with our title
+      if(songs[i].toLowerCase().includes(title.toLowerCase())){
+        console.log('FOUND');
+        found = true;
+        // Pull the link from the property, send it.
+        let returnSong = songs[i].toLowerCase().match(songRegex);
+        bot.sendMessage(msg.chat.id, "Apple Music Link: "+ returnSong[0], {});
+      }
     }
   })
   .catch(error => {
@@ -143,7 +159,7 @@ bot.on('text', function (msg){
     .then(function (data) {
         var title = data.body.name;
         var query = title + ' ';
-        data.body.artists.forEach(artist => { query+= artist.name; });
+        data.body.artists.forEach(artist => { query+= artist.name+" "; });
         searchAppleMusicLink(query, msg, title);
     }, function (err) {
         console.log('Something went wrong!', err);
