@@ -87,7 +87,7 @@ async function getHTMLforAlbum(link, title){
     var propertyRegex = /\{\"\@type\"\:\"MusicRecording"\,\"url\"\:\"https?:\/\/(music\.)?apple\.com\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\"\,\"name\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
     // Look for the link in the array of properties
     var songRegex = /https?:\/\/(music\.)?apple\.com\b([-a-zA-Z0-9?//=]*)/g;
-    var response = await axios.get(link);//.then(response => {
+    var response = await axios.get(link);
     // Get all the songs listed in the HTML doc
     let songs = response.data.toString().match(propertyRegex);
     var i;

@@ -1,4 +1,5 @@
 const appleMusic = require('./applemusic');
+const spotify = require('./spotify');
 const axios = require('axios');
 // TODO: generate new bot token
 var TelegramBot = require('node-telegram-bot-api'); 
@@ -56,7 +57,7 @@ bot.on('text', async function (msg){
     var title = data.body.name;
     var query = title + ' ';
     data.body.artists.forEach(artist => { query+= artist.name+" "; });
-    
+
     bot.sendMessage(msg.chat.id, "Finding your song...", {});
     // Anonymous Async fucntion to search for our apple music link
     (async () => {
@@ -70,8 +71,16 @@ bot.on('text', async function (msg){
 
     var appleRegex = /https?:\/\/(music\.)?apple\.com\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
     var foundURL = msg.text.toString().match(appleRegex);
-    var appleID = foundURL.toString().match(/i=.+/g).toString().substring(2);
-    bot.sendMessage(msg.chat.id, "Apple Music ID is: " + appleID, {});
+    //var appleID = foundURL.toString().match(/i=.+/g).toString().substring(2);
+
+    (async () => {
+      console.log(foundURL[0]);
+      var message = await spotify.searchSpotifyLink(foundURL[0], title);
+      console.log(message);
+      bot.sendMessage(msg.chat.id, message, {});
+    })();
+
+    //bot.sendMessage(msg.chat.id, "Apple Music ID is: " + appleID, {});
         // TODO: parse URL metadata to get title/artist
         // Use spotify API to search the song
         // get first results' URL and send it
