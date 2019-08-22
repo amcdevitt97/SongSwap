@@ -12,7 +12,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "/test"
+    "test": "/test",
+    "build": "next build"
   },
   "author": "",
   "license": "ISC"
