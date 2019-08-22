@@ -14,13 +14,13 @@ async function searchAppleMusicLink (query, title) {
         return await fromAppleArtistLink(link, title);
     }
     else if(link.match(albumRegex)){
-        //console.log("the string: "+ await getHTMLforAlbum(link, title));
         return await getHTMLforAlbum(link, title);
     }
     
 }
 
 // Using google custom search, look for songs in apple music.
+// Because Apple wants to suck my wallet dry.
 async function runSearch(query) {
     const res = await customsearch.cse.list({
     cx: customSearchID ,
@@ -38,7 +38,6 @@ function fromAppleArtistLink(link, title){
     responseType: 'JSON'
     })
     .then(function (response) {
-        console.log(response.data);
         let results = response.data.match(albumRegex);
         // go through the links in results and return the right link
         var i;
@@ -60,19 +59,23 @@ function fromAppleArtistLink(link, title){
     });;
 }
 
-// look for the link that has a title that matches our song
+// Look for the link that has a title that matches our song
 function getHTMLfor (link, title){
     axios.get(link).then(response => {
         // Site has a title tag with our song title in it
         if(response.data.toString().toLowerCase().includes('<title>‎'+title.toLowerCase())){
             found = true;
-            console.log('FOUND');
             var response = "Apple Music Link: "+ link;
             return response.toString();
         }
         else{
+            // If all songs in the for-loop that called 
+            // this function don't have the right title
+            // the 'found' flag will always be false and
+            // send the user a message saying the song wasn't found.
             console.log('NOT THIS');
         }
+        
     })
     .catch(error => {
         
@@ -80,22 +83,26 @@ function getHTMLfor (link, title){
         var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ error;
         return errorMessage.toString();
     })
+    
 }
 
 async function getHTMLforAlbum(link, title){
     // Look for this in the link's HTML
     var propertyRegex = /\{\"\@type\"\:\"MusicRecording"\,\"url\"\:\"https?:\/\/(music\.)?apple\.com\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\"\,\"name\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
+    
     // Look for the link in the array of properties
     var songRegex = /https?:\/\/(music\.)?apple\.com\b([-a-zA-Z0-9?//=]*)/g;
     var response = await axios.get(link);
+
     // Get all the songs listed in the HTML doc
     let songs = response.data.toString().match(propertyRegex);
     var i;
     for(i = 0; i<songs.length; i++){
+
         // For each song, look for the one with our title
         if(songs[i].toLowerCase().includes(title.toLowerCase())){
-        console.log('FOUND');
         found = true;
+
         // Pull the link from the property, send it.
         let returnSong = songs[i].toLowerCase().match(songRegex);
         var response =  "Apple Music Link: "+ returnSong[0];
