@@ -23,13 +23,13 @@ bot.onText(/\/start/, (msg) => {
 
 // The real magic
 bot.on('text', async function (msg){
-
+  var message = msg.text.toString();
   // ---------------SPOTIFY TO APPLE MUSIC --------------------//
-  if(msg.text.toString().includes("https://open.spotify.com/")){
+  if(message.includes("https://open.spotify.com/track")){
     
     // Get full spotify link 
     var spotifyRegex = /(https:\/\/open\.spotify\.com\/track\/)([a-zA-Z0-9]+)(.*)$/g;
-    var foundURL = msg.text.toString().match(spotifyRegex);
+    var foundURL = message.match(spotifyRegex);
     // Get spotify song ID
     var spotifyID = foundURL.toString().match(/\/\w{22}/g).toString().substring(1, 23);
 
@@ -41,23 +41,23 @@ bot.on('text', async function (msg){
 
     // Anonymous Async fucntion to search for our apple music link
     (async () => {
-      var message = await appleMusic.searchAppleMusicLink(query, title);
-      bot.sendMessage(msg.chat.id, message, {});
+      var response = await appleMusic.searchAppleMusicLink(query, title);
+      bot.sendMessage(msg.chat.id, response, {});
     })();
         
   }
 
   // ---------------APPLE MUSIC TO SPOTIFY--------------------//
-  if(msg.text.toString().includes("https://music.apple.com")){
+  if(message.includes("https://music.apple.com")){
     // Make sure it is a track link
-    if(msg.text.toString().includes("?i=")){
+    if(message.includes("?i=")){
       var appleRegex = /https?:\/\/(music\.)?apple\.com\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
-      var foundURL = msg.text.toString().match(appleRegex);
+      var foundURL = message.match(appleRegex);
 
       // Anonymous Async fucntion to search for our spotify link
       (async () => {
-        var message = await spotify.searchSpotifyLink(foundURL[0], title);
-        bot.sendMessage(msg.chat.id, message, {});
+        var response = await spotify.searchSpotifyLink(foundURL[0], title);
+        bot.sendMessage(msg.chat.id, response, {});
       })();
     }
     // Apple music link sent wasn't a track link.
