@@ -1,10 +1,11 @@
+var TelegramBot = require('node-telegram-bot-api'); 
+const bot = new TelegramBot(token, {polling: true});
 const appleMusic = require('./applemusic');
 const spotify = require('./spotify');
 const axios = require('axios');
 // TODO: generate new bot token
-var TelegramBot = require('node-telegram-bot-api'); 
 var token = require('./config/config.js').authToken;
-const bot = new TelegramBot(token, {polling: true});
+
 
 
 
