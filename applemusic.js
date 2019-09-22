@@ -1,8 +1,8 @@
 const axios = require('axios');
 const {google} = require('googleapis');
 const customsearch = google.customsearch('v1');
-var customSearchKey = require('./config/config.js').customSearchKey; 
-var customSearchID = require('./config/config.js').customSearchID; 
+//var customSearchKey = require('./config/config.js').customSearchKey; 
+//var customSearchID = require('./config/config.js').customSearchID; 
 var artistRegex = /https?:\/\/(music\.)?apple\.com\/([-a-zA-Z]{2})\/artist\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
 var albumRegex = /https?:\/\/(music\.)?apple\.com\/([-a-zA-Z]{2})\/album\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
 var found = false;
@@ -23,9 +23,9 @@ async function searchAppleMusicLink (query, title) {
 // Because Apple wants to suck my wallet dry.
 async function runSearch(query) {
     const res = await customsearch.cse.list({
-    cx: customSearchID ,
+    cx: process.env.customSearchID ,
     q: query,
-    auth: customSearchKey,
+    auth: process.env.customSearchKey,
     });
     return res.data.items[0].link;
 }

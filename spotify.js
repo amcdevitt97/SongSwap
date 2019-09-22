@@ -2,15 +2,15 @@ const axios = require('axios');
 
 //---------------   SPOTIFY API - With Wrapper     ------------------
 
-var client_id = require('./config/config.js').spotifyClientID; // Your client id
-var client_secret = require('./config/config.js').spotifyClientSecret; // Your secret
+//var client_id = require('./config/config.js').spotifyClientID; // Your client id
+//var client_secret = require('./config/config.js').spotifyClientSecret; // Your secret
 
 
 var SpotifyWebApi = require('spotify-web-api-node');
 
 var spotifyApi = new SpotifyWebApi({
-    clientId: client_id,
-    clientSecret: client_secret,
+    clientId: process.env.spotifyClientID,
+    clientSecret: process.env.spotifyClientSecret,
 });
 
 // Get an access token and 'save' it using a setter
