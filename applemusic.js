@@ -43,10 +43,10 @@ async function fromAppleArtistLink(link, title){
         var i;
         for(i = 0; i<results.length; i++){
             console.log('getting html');
-            getHTMLfor(results[i], title);
+            await getHTMLfor(results[i], title);
             if(found == true){
-                console.log(getHTMLfor(results[i], title));
-                return getHTMLfor(results[i], title);
+                console.log(await getHTMLfor(results[i], title));
+                return await getHTMLfor(results[i], title);
             }
         }
         setTimeout(function(){
