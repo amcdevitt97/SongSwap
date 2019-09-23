@@ -37,7 +37,7 @@ async function fromAppleArtistLink(link, title){
     url: 'https://api.hackertarget.com/pagelinks/?q='+link,
     responseType: 'JSON'
     })
-    .then(function (response) {
+    .then(async function (response) {
         let results = response.data.match(albumRegex);
         // go through the links in results and return the right link
         var i;
