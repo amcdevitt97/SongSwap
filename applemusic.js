@@ -37,7 +37,7 @@ async function fromAppleArtistLink(link, title){
     url: 'https://api.hackertarget.com/pagelinks/?q='+link,
     responseType: 'JSON'
     });
-    var message = await getPageInfo(response.data);
+    var message = await getPageInfo(response.data, title);
     return message.toString();
     /*.catch(function (error) {
         var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ error;
@@ -45,7 +45,7 @@ async function fromAppleArtistLink(link, title){
     });;*/
 }
 
-async function getPageInfo(webText) {
+async function getPageInfo(webText, title) {
     let results = webText.match(albumRegex);
     // go through the links in results and return the right link
     var i;
