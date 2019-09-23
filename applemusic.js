@@ -11,10 +11,10 @@ async function searchAppleMusicLink (query, title) {
     // Based on the link returned, determine if it is an album or artist link
     var link = await runSearch(query)
     if(link.match(artistRegex)){
-        return await fromAppleArtistLink(link, title);
+        return await Promise.resolve(fromAppleArtistLink(link, title));
     }
     else if(link.match(albumRegex)){
-        return await getHTMLforAlbum(link, title);
+        return await Promise.resolve(getHTMLforAlbum(link, title));
     }
     
 }
