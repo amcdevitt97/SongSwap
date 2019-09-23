@@ -40,7 +40,7 @@ function fromAppleArtistLink(link, title){
     })
     .then(function (response) {
         let results = response.data.match(albumRegex);
-        console.log(result);
+        console.log(response.data);
         // go through the links in results and return the right link
         var i;
         for(i = 0; i<results.length; i++){
