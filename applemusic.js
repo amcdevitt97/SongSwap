@@ -44,6 +44,9 @@ function fromAppleArtistLink(link, title){
         for(i = 0; i<results.length; i++){
             console.log('getting html');
             getHTMLfor(results[i], title);
+            if(found == true){
+                return getHTMLfor(results[i], title);
+            }
         }
         setTimeout(function(){
             console.log('timeout reached');
