@@ -68,12 +68,13 @@ async function getPageInfo(webText, title) {
 
 // Look for the link that has a title that matches our song
 async function getHTMLfor (link, title){
-    await axios.get(link).then(response => {
+    var response = await axios.get(link);
+    
         // Site has a title tag with our song title in it
         if(response.data.toString().toLowerCase().includes('<title>‎'+title.toLowerCase())){
             found = true;
             var response = "Apple Music Link: "+ link;
-            //console.log(response);
+            console.log(response);
             return response.toString();
         }
         else{
@@ -85,13 +86,13 @@ async function getHTMLfor (link, title){
             return null;
         }
         
-    })
-    .catch(error => {
+    
+    /*.catch(error => {
         
         console.log(error);
         var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ error;
         return errorMessage.toString();
-    })
+    })*/
     
 }
 
