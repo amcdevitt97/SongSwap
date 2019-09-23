@@ -73,7 +73,7 @@ function getHTMLfor (link, title){
             // this function don't have the right title
             // the 'found' flag will always be false and
             // send the user a message saying the song wasn't found.
-            console.log('NOT THIS');
+            return "Sorry, out of every Apple music song we searched, we couldn't find your song :( ";
         }
         
     })
