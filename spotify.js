@@ -30,24 +30,28 @@ async function searchSpotifyLink(link, title) {
     
     var propertyRegex = /\"\@type\"\:\"MusicRecording\"\,\"name\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
     var artistRegex = /\"artistName\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
-    var response = await axios.get(link);
+    var response = Promise.resolve(await axios.get(link));
     var property = response.data.toString().match(propertyRegex);
     var artistProperty = response.data.toString().match(artistRegex);
-    
-    var artist = artistProperty[0].toString().substring(14, artistProperty[0].toString().length-1);
-    var title = property[0].toString().substring(33, property[0].toString().length-1 );
-    var query = artist+' '+title;
-    // Little known fact, Apple adds 'feat.' to either titles or artists listings
-    // Spotify doesn't and it messes with search. This find-replace fixes that.
-    query = query.replace("feat.", " ");
-    var data = await spotifyApi.searchTracks(query);
-    if(data.body.tracks.items[0] != undefined){
-        return Promise.resolve('Spotify link: '+ data.body.tracks.items[0].external_urls.spotify);
-        
+    if(artistProperty != null && property != null){
+      var artist = artistProperty[0].toString().substring(14, artistProperty[0].toString().length-1);
+      var title = property[0].toString().substring(33, property[0].toString().length-1 );
+      var query = artist+' '+title;
+      // Little known fact, Apple adds 'feat.' to either titles or artists listings
+      // Spotify doesn't and it messes with search. This find-replace fixes that.
+      query = query.replace("feat.", " ");
+      var data = await spotifyApi.searchTracks(query);
+      if(data.body.tracks.items[0] != undefined){
+        return Promise.resolve('Spotify link: '+ data.body.tracks.items[0].external_urls.spotify); 
+      }
+      else{
+        return "Sorry, there was a problem getting your song :( ";
+      }
     }
     else{
-        return "Sorry, there was a problem getting your song :( "
+      return "Sorry, there was a problem getting your song :( ";
     }
+    
 }
 
 
