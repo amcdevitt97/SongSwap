@@ -45,12 +45,9 @@ async function fromAppleArtistLink(link, title){
             console.log('getting html');
             var response = await getHTMLfor(results[i], title);
             if(response!=null){
-                return response;
+                console.log('HEY ITS HERE');
+                return response.toString();
             }
-            /*if(found == true){
-                console.log(await getHTMLfor(results[i], title));
-                return await getHTMLfor(results[i], title);
-            }*/
         }
         setTimeout(function(){
             console.log('timeout reached');
