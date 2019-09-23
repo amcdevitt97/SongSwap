@@ -40,6 +40,7 @@ function fromAppleArtistLink(link, title){
     })
     .then(function (response) {
         let results = response.data.match(albumRegex);
+        console.log(result);
         // go through the links in results and return the right link
         var i;
         for(i = 0; i<results.length; i++){
@@ -48,6 +49,7 @@ function fromAppleArtistLink(link, title){
         setTimeout(function(){
         if(i == results.length && found == false){
             // song wasn't found, blame my debt.
+            console.log("reached");
             return "Oopsie. We hit a snag trying to get your song. Blame the lack of an Apple Music API key. If you want to contribute to @amcdevitt97 's college kid API fund, venmo me 99 dollars at venmo.com/pay-here";
         }
         }, 5000);
@@ -74,7 +76,7 @@ function getHTMLfor (link, title){
             // this function don't have the right title
             // the 'found' flag will always be false and
             // send the user a message saying the song wasn't found.
-            return "Sorry, out of every Apple music song we searched, we couldn't find your song :( ";
+            //return "Sorry, out of every Apple music song we searched, we couldn't find your song :( ";
         }
         
     })
