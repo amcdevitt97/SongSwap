@@ -31,8 +31,8 @@ async function runSearch(query) {
 }
 
 // Link is an artist link, get all links embedded in the site with song ids.
-function fromAppleArtistLink(link, title){
-    axios({
+async function fromAppleArtistLink(link, title){
+    await axios({
     method: 'get',
     url: 'https://api.hackertarget.com/pagelinks/?q='+link,
     responseType: 'JSON'
@@ -66,8 +66,8 @@ function fromAppleArtistLink(link, title){
 }
 
 // Look for the link that has a title that matches our song
-function getHTMLfor (link, title){
-    axios.get(link).then(response => {
+async function getHTMLfor (link, title){
+    await axios.get(link).then(response => {
         // Site has a title tag with our song title in it
         if(response.data.toString().toLowerCase().includes('<title>‎'+title.toLowerCase())){
             found = true;
