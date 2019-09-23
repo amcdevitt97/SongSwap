@@ -65,7 +65,6 @@ function fromAppleArtistLink(link, title){
 function getHTMLfor (link, title){
     axios.get(link).then(response => {
         // Site has a title tag with our song title in it
-        console.log(response.data);
         if(response.data.toString().toLowerCase().includes('<title>‎'+title.toLowerCase())){
             found = true;
             var response = "Apple Music Link: "+ link;
