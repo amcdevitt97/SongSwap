@@ -45,6 +45,7 @@ function fromAppleArtistLink(link, title){
             console.log('getting html');
             getHTMLfor(results[i], title);
             if(found == true){
+                console.log(getHTMLfor(results[i], title));
                 return getHTMLfor(results[i], title);
             }
         }
@@ -71,7 +72,7 @@ function getHTMLfor (link, title){
         if(response.data.toString().toLowerCase().includes('<title>‎'+title.toLowerCase())){
             found = true;
             var response = "Apple Music Link: "+ link;
-            console.log(response);
+            //console.log(response);
             return response.toString();
         }
         else{
