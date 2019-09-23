@@ -32,18 +32,17 @@ async function runSearch(query) {
 
 // Link is an artist link, get all links embedded in the site with song ids.
 async function fromAppleArtistLink(link, title){
-    await axios({
+    var response = await axios({
     method: 'get',
     url: 'https://api.hackertarget.com/pagelinks/?q='+link,
     responseType: 'JSON'
-    })
-    .then(response => getPageInfo(response.data))
-    .catch(function (error) {
-        // Error hit
-        console.log('second timeout reached');
+    });
+    var message = await getPageInfo(response.data);
+    return message.toString();
+    /*.catch(function (error) {
         var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ error;
         return errorMessage.toString();
-    });;
+    });;*/
 }
 
 async function getPageInfo(webText) {
