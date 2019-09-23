@@ -37,33 +37,34 @@ async function fromAppleArtistLink(link, title){
     url: 'https://api.hackertarget.com/pagelinks/?q='+link,
     responseType: 'JSON'
     })
-    .then(async function (response) {
-        let results = response.data.match(albumRegex);
-        // go through the links in results and return the right link
-        var i;
-        for(i = 0; i<results.length; i++){
-            console.log('response');
-            var response = await getHTMLfor(results[i], title);
-            console.log(response);
-            if(response!=null){
-                console.log('HEY ITS HERE');
-                return response.toString();
-            }
-        }
-        setTimeout(function(){
-            console.log('timeout reached');
-            if(i == results.length && found == false){
-                // song wasn't found, blame my debt.
-                return "Oopsie. We hit a snag trying to get your song. Blame the lack of an Apple Music API key. If you want to contribute to @amcdevitt97 's college kid API fund, venmo me 99 dollars at venmo.com/pay-here";
-            }
-        }, 5000);
-    })
+    .then(await getPageInfo(response) )
     .catch(function (error) {
         // Error hit
         console.log('second timeout reached');
         var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ error;
         return errorMessage.toString();
     });;
+}
+
+async function getPageInfo(response) {
+    let results = response.data.match(albumRegex);
+    // go through the links in results and return the right link
+    var i;
+    for(i = 0; i<results.length; i++){
+        var response = await getHTMLfor(results[i], title);
+        console.log(response);
+        if(response!=null){
+            console.log('HEY ITS HERE');
+            return response.toString();
+        }
+    }
+    setTimeout(function(){
+        console.log('timeout reached');
+        if(i == results.length && found == false){
+            // song wasn't found, blame my debt.
+            return "Oopsie. We hit a snag trying to get your song. Blame the lack of an Apple Music API key. If you want to contribute to @amcdevitt97 's college kid API fund, venmo me 99 dollars at venmo.com/pay-here";
+        }
+    }, 5000);
 }
 
 // Look for the link that has a title that matches our song
@@ -73,7 +74,7 @@ async function getHTMLfor (link, title){
         if(response.data.toString().toLowerCase().includes('<title>‎'+title.toLowerCase())){
             found = true;
             var response = "Apple Music Link: "+ link;
-            //console.log(response);
+            console.log(response);
             return response.toString();
         }
         else{
@@ -115,7 +116,7 @@ async function getHTMLforAlbum(link, title){
             // Pull the link from the property, send it.
             let returnSong = songs[i].toLowerCase().match(songRegex);
             var response =  "Apple Music Link: "+ returnSong[0];
-            return Promise.resolve(response.toString());
+            return response.toString();
         }
     }
     setTimeout(function(){
