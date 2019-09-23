@@ -43,7 +43,10 @@ async function fromAppleArtistLink(link, title){
         var i;
         for(i = 0; i<results.length; i++){
             console.log('getting html');
-            await getHTMLfor(results[i], title);
+            var response = await getHTMLfor(results[i], title);
+            if(response!=null){
+                return response;
+            }
             /*if(found == true){
                 console.log(await getHTMLfor(results[i], title));
                 return await getHTMLfor(results[i], title);
@@ -81,6 +84,7 @@ async function getHTMLfor (link, title){
             // the 'found' flag will always be false and
             // send the user a message saying the song wasn't found.
             console.log('NOT THIS');
+            return null;
         }
         
     })
