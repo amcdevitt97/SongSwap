@@ -44,10 +44,10 @@ async function fromAppleArtistLink(link, title){
         for(i = 0; i<results.length; i++){
             console.log('getting html');
             await getHTMLfor(results[i], title);
-            if(found == true){
+            /*if(found == true){
                 console.log(await getHTMLfor(results[i], title));
                 return await getHTMLfor(results[i], title);
-            }
+            }*/
         }
         setTimeout(function(){
             console.log('timeout reached');
