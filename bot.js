@@ -41,6 +41,8 @@ bot.on('text', async function (msg){
 
     // Anonymous Async fucntion to search for our apple music link
     (async () => {
+      console.log("query:"+query);
+      console.log("title:"+title);
       var response = await appleMusic.searchAppleMusicLink(query, title);
       bot.sendMessage(msg.chat.id, response, {});
     })();
