@@ -42,8 +42,9 @@ async function fromAppleArtistLink(link, title){
         // go through the links in results and return the right link
         var i;
         for(i = 0; i<results.length; i++){
-            console.log('getting html');
+            console.log('response');
             var response = await getHTMLfor(results[i], title);
+            console.log(response);
             if(response!=null){
                 console.log('HEY ITS HERE');
                 return response.toString();
