@@ -37,7 +37,7 @@ async function fromAppleArtistLink(link, title){
     url: 'https://api.hackertarget.com/pagelinks/?q='+link,
     responseType: 'JSON'
     })
-    .then(await getPageInfo(response) )
+    .then(response => getPageInfo(response.data))
     .catch(function (error) {
         // Error hit
         console.log('second timeout reached');
@@ -46,8 +46,8 @@ async function fromAppleArtistLink(link, title){
     });;
 }
 
-async function getPageInfo(response) {
-    let results = response.data.match(albumRegex);
+async function getPageInfo(webText) {
+    let results = webText.match(albumRegex);
     // go through the links in results and return the right link
     var i;
     for(i = 0; i<results.length; i++){
@@ -68,13 +68,13 @@ async function getPageInfo(response) {
 }
 
 // Look for the link that has a title that matches our song
-function getHTMLfor (link, title){
-    axios.get(link).then(response => {
+async function getHTMLfor (link, title){
+    await axios.get(link).then(response => {
         // Site has a title tag with our song title in it
         if(response.data.toString().toLowerCase().includes('<title>‎'+title.toLowerCase())){
             found = true;
-            console.log('FOUND');
             var response = "Apple Music Link: "+ link;
+            //console.log(response);
             return response.toString();
         }
         else{
@@ -85,15 +85,15 @@ function getHTMLfor (link, title){
             console.log('NOT THIS');
             return null;
         }
-
+        
     })
     .catch(error => {
-
+        
         console.log(error);
         var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ error;
         return errorMessage.toString();
     })
-
+    
 }
 
 async function getHTMLforAlbum(link, title){
@@ -116,7 +116,7 @@ async function getHTMLforAlbum(link, title){
             // Pull the link from the property, send it.
             let returnSong = songs[i].toLowerCase().match(songRegex);
             var response =  "Apple Music Link: "+ returnSong[0];
-            return response.toString();
+            return Promise.resolve(response.toString());
         }
     }
     setTimeout(function(){
