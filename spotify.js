@@ -30,7 +30,7 @@ async function searchSpotifyLink(link, title) {
     
     var propertyRegex = /\"\@type\"\:\"MusicRecording\"\,\"name\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
     var artistRegex = /\"artistName\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
-    var response = Promise.resolve(await axios.get(link));
+    var response = await axios.get(link);
     var property = response.data.toString().match(propertyRegex);
     var artistProperty = response.data.toString().match(artistRegex);
     if(artistProperty != null && property != null){
