@@ -44,6 +44,7 @@ bot.on('text', async function (msg){
       console.log("query:"+query);
       console.log("title:"+title);
       var response = await appleMusic.searchAppleMusicLink(query, title);
+      console.log(response);
       bot.sendMessage(msg.chat.id, response, {});
     })();
         
@@ -59,6 +60,7 @@ bot.on('text', async function (msg){
       // Anonymous Async fucntion to search for our spotify link
       (async () => {
         var response = await spotify.searchSpotifyLink(foundURL[0], title);
+        console.log(response);
         bot.sendMessage(msg.chat.id, response, {});
       })();
     }

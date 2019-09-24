@@ -57,13 +57,13 @@ async function getPageInfo(webText, title) {
             return response.toString();
         }
     }
-    setTimeout(function(){
+    /*setTimeout(function(){
         console.log('timeout reached');
         if(i == results.length && found == false){
             // song wasn't found, blame my debt.
             return "Oopsie. We hit a snag trying to get your song. Blame the lack of an Apple Music API key. If you want to contribute to @amcdevitt97 's college kid API fund, venmo me 99 dollars at venmo.com/pay-here";
         }
-    }, 5000);
+    }, 5000);*/
 }
 
 // Look for the link that has a title that matches our song
@@ -116,15 +116,16 @@ async function getHTMLforAlbum(link, title){
             // Pull the link from the property, send it.
             let returnSong = songs[i].toLowerCase().match(songRegex);
             var response =  "Apple Music Link: "+ returnSong[0];
-            return Promise.resolve(response.toString());
+            return response.toString();
         }
     }
-    setTimeout(function(){
+    return "Oopsie. We hit a snag trying to get your song. Blame the lack of an Apple Music API key. If you want to contribute to @amcdevitt97 's college kid API fund, venmo me 99 dollars at venmo.com/pay-here";
+    /*setTimeout(function(){
         if(i == songs.length && found == false){
             // song wasn't found, blame my debt.
             return "Oopsie. We hit a snag trying to get your song. Blame the lack of an Apple Music API key. If you want to contribute to @amcdevitt97 's college kid API fund, venmo me 99 dollars at venmo.com/pay-here";
         }
-    }, 5000);
+    }, 5000);*/
 }
 
 module.exports = {searchAppleMusicLink,runSearch,fromAppleArtistLink, getHTMLfor, getHTMLforAlbum};
