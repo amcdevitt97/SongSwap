@@ -65,6 +65,7 @@ async function getPageInfo(webText, title) {
         // go through the links in results and return the right link
         var i;
         for(i = 0; i<results.length; i++){
+            console.log(results[i]);
             var response = await getHTMLfor(results[i], title);
             console.log(response);
             if(response!=null){
