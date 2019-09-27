@@ -4,7 +4,7 @@ const customsearch = google.customsearch('v1');
 //var customSearchKey = require('./config/config.js').customSearchKey; 
 //var customSearchID = require('./config/config.js').customSearchID; 
 var artistRegex = /https?:\/\/(music\.)?apple\.com\/([-a-zA-Z]{2})\/artist\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
-var albumRegex = /https?:\/\/(music\.)?apple\.com\/([-a-zA-Z]{2})\/album\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+var albumRegex = /https?:\/\/(music\.)?apple\.com\/([-a-zA-Z]{2})\/album\b([-a-zA-Z0-9()$@:%_\+.~#?&//=]*)/g;
 var found = false;
 
 async function searchAppleMusicLink (query, title) {
