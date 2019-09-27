@@ -19,7 +19,7 @@ async function searchAppleMusicLink (query, title) {
         }
     }
     catch(err){
-        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err+ " in applemusic.js line 22";
         return errorMessage.toString();
     }
     
@@ -37,7 +37,7 @@ async function runSearch(query) {
         return res.data.items[0].link;
     }
     catch(err){
-        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err + " in applemusic.js line 40";
         return errorMessage.toString();
     }
 }
@@ -54,7 +54,7 @@ async function fromAppleArtistLink(link, title){
         return message.toString();
     }
     catch(err){
-        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err + " in applemusic.js line 57";
         return errorMessage.toString();
     }
 }
@@ -74,7 +74,7 @@ async function getPageInfo(webText, title) {
         }
     }
     catch(err){
-        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err + " in applemusic.js line 77";
         return errorMessage.toString();
     }
 }
@@ -100,7 +100,7 @@ async function getHTMLfor (link, title){
         }
     }
     catch(err){
-        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err+ " in applemusic.js line 103";
         return errorMessage.toString();
     }
 }
@@ -131,7 +131,7 @@ async function getHTMLforAlbum(link, title){
         }
     }
     catch(err){
-        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err+ " in applemusic.js line 134";
         return errorMessage.toString();
     }
 }

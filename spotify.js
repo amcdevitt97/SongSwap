@@ -53,7 +53,7 @@ async function searchSpotifyLink(link, title) {
       }
   }
   catch(err){
-    var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+    var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err+ " in spotify.js line 56";
     return errorMessage.toString();
   }
 }
@@ -66,7 +66,7 @@ async function getTrackName(spotifyID) {
       return response;
     }
     catch(err){
-      var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+      var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err + " in spotify.js line 69 (nice)";;
       return errorMessage.toString();
   }
 }

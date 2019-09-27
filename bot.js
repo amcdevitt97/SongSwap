@@ -40,7 +40,7 @@ bot.on('text', async function (msg){
       var query = title + ' ';
       data.body.artists.forEach(artist => { query+= artist.name+" "; });
     }catch(err){
-      var errorMessage = "Oopsie. We hit a snag trying to find your spotify song data. If you see @amcdevitt97, tell her this error happened: "+ err;
+      var errorMessage = "Oopsie. We hit a snag trying to find your spotify song data. If you see @amcdevitt97, tell her this error happened: "+ err + " in bot.js line 43";
       bot.sendMessage(msg.chat.id, errorMessage, {});
     }
 
@@ -54,7 +54,7 @@ bot.on('text', async function (msg){
         bot.sendMessage(msg.chat.id, response, {});
       }
       catch(err){
-        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err+ " in bot.js line 57";
         bot.sendMessage(msg.chat.id, errorMessage, {});
       }
     })();
@@ -76,7 +76,7 @@ bot.on('text', async function (msg){
           bot.sendMessage(msg.chat.id, response, {});
         }
         catch(err){
-          var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+          var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err + " in bot.js line 79";
           bot.sendMessage(msg.chat.id, errorMessage, {});
         }
       })();
