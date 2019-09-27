@@ -27,38 +27,48 @@ spotifyApi.clientCredentialsGrant().then(
 
 
 async function searchSpotifyLink(link, title) {
-    
-    var propertyRegex = /\"\@type\"\:\"MusicRecording\"\,\"name\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
-    var artistRegex = /\"artistName\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
-    var response = await axios.get(link);
-    var property = response.data.toString().match(propertyRegex);
-    var artistProperty = response.data.toString().match(artistRegex);
-    if(artistProperty != null && property != null){
-      var artist = artistProperty[0].toString().substring(14, artistProperty[0].toString().length-1);
-      var title = property[0].toString().substring(33, property[0].toString().length-1 );
-      var query = artist+' '+title;
-      // Little known fact, Apple adds 'feat.' to either titles or artists listings
-      // Spotify doesn't and it messes with search. This find-replace fixes that.
-      query = query.replace("feat.", " ");
-      var data = await spotifyApi.searchTracks(query);
-      if(data.body.tracks.items[0] != undefined){
-        return Promise.resolve('Spotify link: '+ data.body.tracks.items[0].external_urls.spotify); 
+    try{
+      var propertyRegex = /\"\@type\"\:\"MusicRecording\"\,\"name\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
+      var artistRegex = /\"artistName\"\:\"\b([-a-zA-Z0-9()@:%_\'\-\*\s\+\,.~#?&//=]*)\"/g;
+      var response = await axios.get(link);
+      var property = response.data.toString().match(propertyRegex);
+      var artistProperty = response.data.toString().match(artistRegex);
+      if(artistProperty != null && property != null){
+        var artist = artistProperty[0].toString().substring(14, artistProperty[0].toString().length-1);
+        var title = property[0].toString().substring(33, property[0].toString().length-1 );
+        var query = artist+' '+title;
+        // Little known fact, Apple adds 'feat.' to either titles or artists listings
+        // Spotify doesn't and it messes with search. This find-replace fixes that.
+        query = query.replace("feat.", " ");
+        var data = await spotifyApi.searchTracks(query);
+        if(data.body.tracks.items[0] != undefined){
+          return Promise.resolve('Spotify link: '+ data.body.tracks.items[0].external_urls.spotify); 
+        }
+        else{
+          return "Sorry, there was a problem getting your song :( ";
+        }
       }
       else{
         return "Sorry, there was a problem getting your song :( ";
       }
-    }
-    else{
-      return "Sorry, there was a problem getting your song :( ";
-    }
-    
+  }
+  catch(err){
+    var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+    return errorMessage.toString();
+  }
 }
 
 
 async function getTrackName(spotifyID) {
     
-    var response = await spotifyApi.getTrack(spotifyID)
-    return Promise.resolve(response);
+    try{
+      var response = await spotifyApi.getTrack(spotifyID)
+      return response;
+    }
+    catch(err){
+      var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+      return errorMessage.toString();
+  }
 }
 
 
