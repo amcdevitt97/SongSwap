@@ -34,18 +34,29 @@ bot.on('text', async function (msg){
     var spotifyID = foundURL.toString().match(/\/\w{22}/g).toString().substring(1, 23);
 
     // Lookup title and artist
-    var data = await spotify.getTrackName(spotifyID)
-    var title = data.body.name;
-    var query = title + ' ';
-    data.body.artists.forEach(artist => { query+= artist.name+" "; });
+    try{
+      var data = await spotify.getTrackName(spotifyID)
+      var title = data.body.name;
+      var query = title + ' ';
+      data.body.artists.forEach(artist => { query+= artist.name+" "; });
+    }catch(err){
+      var errorMessage = "Oopsie. We hit a snag trying to find your spotify song data. If you see @amcdevitt97, tell her this error happened: "+ err;
+      bot.sendMessage(msg.chat.id, errorMessage, {});
+    }
 
     // Anonymous Async fucntion to search for our apple music link
     (async () => {
-      console.log("query:"+query);
-      console.log("title:"+title);
-      var response = await appleMusic.searchAppleMusicLink(query, title);
-      console.log(response);
-      bot.sendMessage(msg.chat.id, response, {});
+      try{
+        console.log("query:"+query);
+        console.log("title:"+title);
+        var response = await appleMusic.searchAppleMusicLink(query, title);
+        console.log(response);
+        bot.sendMessage(msg.chat.id, response, {});
+      }
+      catch(err){
+        var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+        bot.sendMessage(msg.chat.id, errorMessage, {});
+      }
     })();
         
   }
@@ -59,9 +70,15 @@ bot.on('text', async function (msg){
 
       // Anonymous Async fucntion to search for our spotify link
       (async () => {
-        var response = await spotify.searchSpotifyLink(foundURL[0], title);
-        console.log(response);
-        bot.sendMessage(msg.chat.id, response, {});
+        try{
+          var response = await spotify.searchSpotifyLink(foundURL[0], title);
+          console.log(response);
+          bot.sendMessage(msg.chat.id, response, {});
+        }
+        catch(err){
+          var errorMessage = "Oopsie. We hit a snag trying to get your song. If you see @amcdevitt97, tell her this error happened: "+ err;
+          bot.sendMessage(msg.chat.id, errorMessage, {});
+        }
       })();
     }
     // Apple music link sent wasn't a track link.
