@@ -35,7 +35,7 @@ bot.on('text', async function (msg){
 
     // Lookup title and artist
     try{
-      var data = await spotify.getTrackName(spotifyID)
+      var data = await spotify.getTrackName(spotifyID);
       var title = data.body.name;
       var query = title + ' ';
       data.body.artists.forEach(artist => { query+= artist.name+" "; });
