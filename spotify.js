@@ -16,7 +16,6 @@ var spotifyApi = new SpotifyWebApi({
 // Get an access token and 'save' it using a setter
 spotifyApi.clientCredentialsGrant().then(
   function(data) {
-    console.log(data.body['access_token']);
     spotifyApi.setAccessToken(data.body['access_token']);
   },
   function(err) {
